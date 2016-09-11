@@ -1,24 +1,42 @@
-#!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 import webapp2
+import cgi
+import jinja2
+import os
+from google.appengine.ext import db
 
-class MainHandler(webapp2.RequestHandler):
+# set up jinja
+template_dir = os.path.join(os.path.dirname(__file__), "templates")
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
+
+class Movie(db.Model):
+    title = db.StringProperty(required = True)
+    created = db.DateTimeProperty(auto_now_add = True)
+    watched = db.BooleanProperty(required = True, default = False)
+    rating = db.StringProperty()
+
+class Handler(webapp2.RequestHandler):
+    """ A base RequestHandler class for the site.
+        The other handlers inherit form this one.
+    """
+
+    def renderError(self, error_code):
+        """ Sends an HTTP error code and a generic "oops!" message to the client. """
+
+        self.error(error_code)
+        self.response.write("Oops! Something went wrong.")
+
+
+class MainHandler(Handler):
+    """ Handles request to the main page.
+    """
+
     def get(self):
-        self.response.write('I do not want to build a blog!')
+        unwatched_movies = db.GqlQuery("SELECT * FROM Movie where watched = False")
+        t = jinja_env.get_template("frontpage.html")
+        response = t.render(
+                        movies = unwatched_movies,
+                        error = self.request.get("error"))
+        self.response.write(response)
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
