@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p>Build a Blog since I have to</p>
+
+  {% for post in posts %}
+    {{post.render() | safe }}
+    <br>
+    <br>
+  {% endfor %}
+
+{% endblock %}
 
 <!-- <ul>
 {% for movie in movies %}
@@ -24,4 +31,3 @@
 </form>
 
 <p class="error">{{ error if error else "" }}</p> -->
-{% endblock %}

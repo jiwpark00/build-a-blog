@@ -35,13 +35,10 @@ class Index(Handler):
 class MainHandler(Handler):
     """ Handles request to the main page of the blog. So '/blog' page
     """
-
     def get(self):
-        unwatched_movies = db.GqlQuery("SELECT * FROM Post where watched = False")
+        posts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 5")
         t = jinja_env.get_template("frontpage.html")
-        response = t.render(
-                        movies = unwatched_movies,
-                        error = self.request.get("error"))
+        response = t.render(posts = posts)
         self.response.write(response)
 
 # class Latest5Blog(Handler):
