@@ -41,12 +41,11 @@ class MainHandler(Handler):
         response = t.render(posts = posts)
         self.response.write(response)
 
-# class Latest5Blog(Handler):
-#     def get(self):
-#         posts = db.GqlQuery("SELECT * FROM Post ")
-
+class NewEntry(Handler):
+    """ Handles request to the new post writing of the blog. So '/blog/newpost' page. """
 
 app = webapp2.WSGIApplication([
     ('/',Index),
-    ('/blog', MainHandler)
+    ('/blog', MainHandler),
+    ('/blog/newpost', NewEntry)
 ], debug=True)
