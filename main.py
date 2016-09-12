@@ -66,7 +66,7 @@ class NewEntry(Handler):
 class ViewPostHandler(Handler):
     def get(self, id):
         entry = Post.get_by_id(int(id))
-
+        
         if not entry:
             error = "<h3>Not a valid post ID! Return to <a href='/blog'>Main</a></h3>"
             self.response.write(error)

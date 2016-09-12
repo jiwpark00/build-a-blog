@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {{entry.post | safe}}
-
+<div class="post-title" ><h3>
+{{entry.title | safe}}</h3>
+</div>
+<div class="post-title">
+{{entry.post | safe }}
+<div>
+<br>
+<br>
 {% endblock %}
