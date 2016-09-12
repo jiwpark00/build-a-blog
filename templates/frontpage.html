@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+  <p>To post, please go to the <a href="/blog/newpost">newpost page.</a> </p>
   {% for post in posts %}
     {{post.render() | safe }}
     <br>
